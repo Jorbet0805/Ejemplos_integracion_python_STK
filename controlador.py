@@ -109,10 +109,10 @@ def actualizar_fecha(root,tiempo_incial,tiempo_final):
     actualizadorfecha.updatefecha(tiempo_incial,tiempo_final)
 
 
-#@decorador.decorador_error(mensaje="A ocurrido un error en la insercion de objetivos",
-#                 hacer_print=True,
-#                 mensaje_comienzo="insertando objetivos"
-#                 )
+@decorador.decorador_error(mensaje="A ocurrido un error en la insercion de objetivos",
+                 hacer_print=True,
+                 mensaje_comienzo="insertando objetivos"
+                 )
 def Insetar_objetivos (root,path_objetivos):
     #Insetar rejilla
  
@@ -142,7 +142,7 @@ def procesar_escenarios(
         visible
         ):
 
-    #try:
+    try:
     
         if boton:
            label_inicial = boton.GetLabel()
@@ -201,12 +201,12 @@ def procesar_escenarios(
         if  boton:
             boton.SetLabel(label_inicial)
             boton.Enable()
-    #except:
-    #    print("Proceso interrumpido")
-    #    app.delcliente()
-    #    if  boton:
-    #        boton.SetLabel(label_inicial)
-    #        boton.Enable()
+    except:
+        print("Proceso interrumpido")
+        app.delcliente()
+        if  boton:
+            boton.SetLabel(label_inicial)
+            boton.Enable()
 
 
 if __name__ == "__main__":
@@ -221,14 +221,11 @@ if __name__ == "__main__":
     EndTime = EndPlan.strftime('%d %b %Y 00:00:00.00')
     
     directorio_escenarios = "D:\\Mis documentos\\Jorge\\ABAE\\OMS\\Escenaros_2"
-    directorio_EPH = 'C:\\Users\\BAJAME\\Anaconda3\\envs\\updatestkescenario\\mapp\\EPH'
     procesar_escenarios(
         boton=None,
         directorio_escenarios=directorio_escenarios, 
         tiempo_incial=StartTime,
         tiempo_final=EndTime, 
-        directorio_EPH=directorio_EPH, 
-        act_parametros_orbitales=False, 
         act_tiempo=True,
         crear_reporte_accesos=False, 
         visible=False
