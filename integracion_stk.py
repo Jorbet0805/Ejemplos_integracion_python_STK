@@ -104,7 +104,7 @@ class guardador():
         self.root = root
     def guardar_escenario(self):
         self.root.SaveScenario()
-        self.root.CloseScenario(); 
+        self.root.CloseScenario() 
 
 
 

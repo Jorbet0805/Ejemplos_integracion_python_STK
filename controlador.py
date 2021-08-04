@@ -27,7 +27,7 @@ class appstk():
         self.root_actual = None
         
     def get_cliente(self, 
-                    type="cargar",
+                    type="crear",
                     visible=False
                     ):
 
@@ -39,8 +39,8 @@ class appstk():
         
         print("creando interfaz")
 
-        if self.type == "crear" or self.type == "cargar":
-            print("creando o cargando")
+        if self.type == "crear":
+            print("creando App")
             import pythoncom
             pythoncom.CoInitialize()
             self.uiApplication = CreateObject('STK10.Application')
@@ -60,27 +60,35 @@ class appstk():
             print("Hecho no visible")
 
         
-    def getroot(self,path_sc=None):
+    def getroot(self):
     
-        self.path_sc = path_sc
-
         if self.uiApplication == None:
             print("Debe de crear un cliente primero")
             return None
-
+        
         import pythoncom
         pythoncom.CoInitialize()
         cliente_stk = self.uiApplication
         root = cliente_stk.Personality2
 
+        self.root_actual = root 
+
+        return root 
+    
+    def cargar_escenario (self,path_sc=None):
+        
+        self.path_sc = path_sc
+
+        if self.root_actual == None:
+           print("No hay nigun root definido")
+           return
+
         if self.type == "cargar":
            #Cargar scenario
-           print("cargando archivo: ".format(self.path_sc))
-           root.LoadScenario( self.path_sc)
-
-        self.root_actual = root   
-
-        return root
+           print("cargando archivo: {0}".format(self.path_sc))
+           self.root_actual.LoadScenario(self.path_sc)
+        
+        return self.root_actual 
 
     def delcliente(self):
         try:
@@ -101,10 +109,10 @@ def actualizar_fecha(root,tiempo_incial,tiempo_final):
     actualizadorfecha.updatefecha(tiempo_incial,tiempo_final)
 
 
-@decorador.decorador_error(mensaje="A ocurrido un error en la insercion de objetivos",
-                 hacer_print=True,
-                 mensaje_comienzo="insertando objetivos"
-                 )
+#@decorador.decorador_error(mensaje="A ocurrido un error en la insercion de objetivos",
+#                 hacer_print=True,
+#                 mensaje_comienzo="insertando objetivos"
+#                 )
 def Insetar_objetivos (root,path_objetivos):
     #Insetar rejilla
  
@@ -134,7 +142,7 @@ def procesar_escenarios(
         visible
         ):
 
-    try:
+    #try:
     
         if boton:
            label_inicial = boton.GetLabel()
@@ -159,18 +167,23 @@ def procesar_escenarios(
         iter = 0
         for fichero_sc in ficheros_sc:
             print(fichero_sc)
-
-            type = "cargar"
-        
-            if boton:
-               boton.SetLabel( "Procesando {0}".format(iter) )
-
-
-            app.get_cliente(
+            
+            if iter == 0:
+                type = "crear"
+                app.get_cliente(
                             type=type,
                             visible=visible
                             )
-            root = app.getroot(path_sc=fichero_sc)
+                app.getroot()
+                root = app.root_actual
+           
+            
+            app.type = "cargar" 
+        
+            if boton:
+                boton.SetLabel( "Procesando {0}".format(iter) )
+            
+            app.cargar_escenario(path_sc=fichero_sc)
 
         
             if act_tiempo: 
@@ -188,12 +201,12 @@ def procesar_escenarios(
         if  boton:
             boton.SetLabel(label_inicial)
             boton.Enable()
-    except:
-        print("Proceso interrumpido")
-        app.delcliente()
-        if  boton:
-            boton.SetLabel(label_inicial)
-            boton.Enable()
+    #except:
+    #    print("Proceso interrumpido")
+    #    app.delcliente()
+    #    if  boton:
+    #        boton.SetLabel(label_inicial)
+    #        boton.Enable()
 
 
 if __name__ == "__main__":

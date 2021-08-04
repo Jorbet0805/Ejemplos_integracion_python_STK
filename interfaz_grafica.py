@@ -181,8 +181,7 @@ class Panel_eleguir_tiempo ( wx.Panel ):
     
     def __del__( self ):
         pass
-    
-    
+     
     
     def m_comboBox2OnText( self, event ):
         objeto = event.GetEventObject()
