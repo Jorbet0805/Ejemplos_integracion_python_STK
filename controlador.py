@@ -11,7 +11,7 @@ import pdb
 from datetime import datetime
 from datetime import timedelta
 
-import integracion_stk_modificar_fecha as istk
+import integracion_stk as istk
 import util.busqueda_eph as busqueda_eph
 import util.mensaje_error as mensaje_error
 import util.getdirsandfiles as getdirsandfiles

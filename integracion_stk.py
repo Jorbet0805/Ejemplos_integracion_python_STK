@@ -37,7 +37,7 @@ def formatear_OrbitEpoch(OrbitEpoch):
         OrbitEpoch_datatime = datetime.strptime(OrbitEpoch, '%Y-%m-%d %H:%M:%S');
         OrbitEpoch = OrbitEpoch_datatime.strftime('%d %b %Y %H:%M:%S');
         return OrbitEpoch
-        
+  
 
 class actualizarfecha():
     def __init__(self,root):
@@ -59,13 +59,14 @@ class actualizarfecha():
             self.Iescenario.StartTime = str(StartTime)
             self.Iescenario.StopTime = str(EndTime)         
 
-
 class guardador():
     def __init__(self,root):
         self.root = root
     def guardar_escenario(self):
         self.root.SaveScenario()
         self.root.CloseScenario(); 
+
+
 
 
 if __name__ == '__main__':
@@ -78,31 +79,4 @@ if __name__ == '__main__':
 
    Iescenario = root.CurrentScenario.QueryInterface(STKObjects.IAgScenario)
 
-
-   #path_rejilla= os.path.join(os.path.dirname(__file__), "Rejilla.csv");
-   #creadorderejilla=creartarjetrejilla(root,path_rejilla);
-   #creadorderejilla.insertartajets();
-   
-   #del uiApplication
-   
-   #Actualizar parametros orbitales
-   #file_eph = 'F:\\Usuario\\Desktop\\EPH\\OMS_TDRS_VRSS-2_20210107_000000002071.EPH';
-   #manejadorstk = actualizarparaorbitales(root,file_eph);
-   #n_satelite = 2;
-   #manejadorstk.satupdateparam(n_satelite);
-
-
-   #Actualizar fecha
-   #file_eph = 'F:\\Usuario\\Desktop\\EPH\\OMS_TDRS_VRSS-2_20210107_000000002071.EPH';  
-   #manejadorstk = actualizarparaorbitales(root,file_eph);
-   #manejadorstk.updatefecha()
-
-   #creadorreporte = creador_reporte(root)
-   #reporte = creadorreporte.crear_reporte()
-   #creadorreporte.guardar_reporte()
-   #print(reporte)
-
    path_guardado_provi = 'C:\\Users\\BAJAME\\Documents\\Favorites\\elimpf_instrucc\\Desktop\\Simulaciones'
-
-
-   #path_logo = os.path.join(os.path.dirname(__file__), "ABAE_logo.png") 

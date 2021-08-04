@@ -41,6 +41,9 @@ class Frame ( wx.Frame ):
         pass
     
 
+###########################################################################
+## Class Panel_calendario
+###########################################################################
 
 class Panel_calendario ( wx.Panel ):
     
@@ -215,6 +218,9 @@ class Panel_eleguir_tiempo ( wx.Panel ):
     def m_textCtrl6OnText( self, event ):
         event.Skip()
         
+###########################################################################
+## Class Panel_direscenario
+###########################################################################
 
 class Panel_direscenario ( wx.Panel ):
     
