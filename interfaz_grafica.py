@@ -429,4 +429,6 @@ if __name__ == '__main__':
 
     Frame_principal.Show(True)
 
+    print("Preba Git")
+
     app.MainLoop() 
