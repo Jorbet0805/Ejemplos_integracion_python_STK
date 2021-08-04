@@ -57,7 +57,47 @@ class actualizarfecha():
             self.Iescenario.StartTime = str(StartTime)
         except:
             self.Iescenario.StartTime = str(StartTime)
-            self.Iescenario.StopTime = str(EndTime)         
+            self.Iescenario.StopTime = str(EndTime)    
+
+
+
+class introductor_objetivo():
+    def __init__(self,root,path_objetivos):
+        self.root = root
+        
+        self.df = pd.read_csv(path_objetivos, header=0);
+        
+    def insertar_tarjet (self,nombre,latitud,longitud):
+            
+            if self.root.CurrentScenario.Children.Contains(STKObjects.eTarget,"{0}".format(nombre)):
+                tarjet = self.root.CurrentScenario.Children.Item("{0}".format(nombre)) 
+                #print(":tarjet {0} ya existe".format(nombre))
+            else:
+                tarjet = self.root.CurrentScenario.Children.New(STKObjects.eTarget,"{0}".format(nombre))
+                #print(":tarjet {0} creado".format(nombre))
+            
+            tarjet2 = tarjet.QueryInterface(STKObjects.IAgTarget);
+            tarjet2.Position.AssignPlanetodetic(float(latitud),float(longitud),0);
+            tarjet2.Graphics.Color = 255
+            tarjet2.Graphics.MarkerColor = 255
+            
+            return tarjet
+
+
+        
+    def insertartajets(self):
+            
+            for n_dato_objetivo in range(len(self.df)):
+                
+                datos_objetivo = self.df.iloc[n_dato_objetivo];
+
+                nombre = datos_objetivo[0];
+                latitud = datos_objetivo[1];
+                longitud = datos_objetivo[2];
+                
+                target = self.insertar_tarjet (nombre,latitud,longitud);
+    
+
 
 class guardador():
     def __init__(self,root):

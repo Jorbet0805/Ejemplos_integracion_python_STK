@@ -25,7 +25,7 @@ import controlador
 class Frame ( wx.Frame ):
     
     def __init__( self, parent ):
-        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 500, 400), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
+        wx.Frame.__init__ ( self, parent, id = wx.ID_ANY, title = wx.EmptyString, pos = wx.DefaultPosition, size = wx.Size( 500, 700), style = wx.DEFAULT_FRAME_STYLE|wx.TAB_TRAVERSAL )
         
         self.SetSizeHintsSz( wx.DefaultSize, wx.DefaultSize )
         
@@ -244,6 +244,74 @@ class Panel_direscenario ( wx.Panel ):
     def __del__( self ):
         pass
 
+
+###########################################################################
+## Class Panel_dir_archivo_objetivos
+###########################################################################
+
+class Panel_dir_archivo_objetivos ( wx.Panel ):
+    
+    def __init__( self, parent ):
+        wx.Panel.__init__ ( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1, -1 ), style = wx.TAB_TRAVERSAL )
+        
+        bSizer9 = wx.BoxSizer( wx.VERTICAL )
+        
+        self.m_staticText2 = wx.StaticText( self, wx.ID_ANY, u"Direccion archivo de objetivos", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText2.Wrap( -1 )
+        self.m_staticText2.SetFont( wx.Font( 9, 74, 90, 92, False, "Arial" ) )
+        bSizer9.Add( self.m_staticText2, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        
+        self.filePicker_csv = wx.FilePickerCtrl( self, wx.ID_ANY, wx.EmptyString, "Selecionar archivo", u"*.*", wx.DefaultPosition, wx.DefaultSize, wx.FLP_DEFAULT_STYLE )
+        bSizer9.Add( self.filePicker_csv, 0, wx.ALL|wx.EXPAND, 5 )
+        
+        
+        self.SetSizer( bSizer9 )
+        self.Layout()
+    
+    def __del__( self ):
+        pass
+
+
+
+###########################################################################
+## Class Panel_opciones
+###########################################################################
+
+class Panel_opciones ( wx.Panel ):
+    
+    def __init__( self, parent ):
+        wx.Panel.__init__ ( self, parent, id = wx.ID_ANY, pos = wx.DefaultPosition, size = wx.Size( -1,-1 ), style = wx.TAB_TRAVERSAL )
+        
+        bSizer14 = wx.BoxSizer( wx.VERTICAL )
+        
+        self.m_staticText7 = wx.StaticText( self, wx.ID_ANY, u"Opciones", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_staticText7.Wrap( -1 )
+        self.m_staticText7.SetFont( wx.Font( 9, 74, 90, 92, False, "Arial" ) )
+        bSizer14.Add( self.m_staticText7, 0, wx.ALL|wx.ALIGN_CENTER_HORIZONTAL, 5 )
+        
+        self.m_checkBox6 = wx.CheckBox( self, wx.ID_ANY, u"Usar escenario activo", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBox6.SetValue(True)
+        bSizer14.Add( self.m_checkBox6, 0, wx.ALL, 5 )
+        
+        self.m_checkBox7 = wx.CheckBox( self, wx.ID_ANY, u"Actualizar tiempo", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBox7.SetValue(True)
+        bSizer14.Add( self.m_checkBox7, 0, wx.ALL, 5 )
+
+        self.m_checkBox8 = wx.CheckBox( self, wx.ID_ANY, u"Insertar objetivos", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBox8.SetValue(True)
+        bSizer14.Add( self.m_checkBox8, 0, wx.ALL, 5 )
+
+        self.m_checkBox9 = wx.CheckBox( self, wx.ID_ANY, u"Proceso Visible", wx.DefaultPosition, wx.DefaultSize, 0 )
+        self.m_checkBox9.SetValue(False)
+        bSizer14.Add( self.m_checkBox9, 0, wx.ALL, 5 )
+        
+        self.SetSizer( bSizer14 )
+        self.Layout()
+    
+    def __del__( self ):
+        pass
+
+
 ###########################################################################
 ## Class Panel_button
 ###########################################################################
@@ -283,20 +351,27 @@ class Panel_button ( wx.Panel ):
         hijos = self.parent.GetChildren()
 		
         Panel_direscenario = hijos[0]
-        Panel_eleguir_tiempo = hijos[1]  
+        Panel_dir_archivo_objetivos = hijos[1]
+        Panel_eleguir_tiempo = hijos[2]  
        
         directorio_escenarios = Panel_direscenario.m_dirPicker1.GetPath()
+
+        dir_archivo_objetivos = Panel_dir_archivo_objetivos.filePicker_csv.GetPath()
         
         tiempo_incial = Panel_eleguir_tiempo.m_textCtrl6.GetValue()
         tiempo_final = Panel_eleguir_tiempo.m_textCtrl7.GetValue()
 
-        act_tiempo = True
-        visible = True
+    
+        usar_escenario_activo = Panel_opciones.m_checkBox6.GetValue()
+        act_tiempo = Panel_opciones.m_checkBox7.GetValue()
+        introducir_rejilla = Panel_opciones.m_checkBox8.GetValue()
+        visible = Panel_opciones.m_checkBox9.GetValue()
 
         print(visible)
         print(tiempo_incial)
         print(tiempo_final)
         print(directorio_escenarios)
+        print(dir_archivo_objetivos)
 
         #print(self.parent.Children.Panel_direscenario)
 
@@ -305,9 +380,12 @@ class Panel_button ( wx.Panel ):
                     kwargs={
                          "boton":boton,
                          "directorio_escenarios":directorio_escenarios, 
+                         "dir_archivo_objetivos":dir_archivo_objetivos,
                          "tiempo_incial":tiempo_incial,
-                         "tiempo_final":tiempo_final, 
+                         "tiempo_final":tiempo_final,
+                         "usar_escenario_activo":usar_escenario_activo, 
                          "act_tiempo":act_tiempo,
+                         "introducir_rejilla" : introducir_rejilla,
                          "visible":visible},
                     daemon=False)    
         hilo.start()
@@ -337,8 +415,14 @@ if __name__ == '__main__':
     Panel_direscenario = Panel_direscenario(parent=Frame_principal)
     Sizer_panel_principal.Add( Panel_direscenario, 1, wx.EXPAND|wx.ALL, 5 )
 
+    Panel_dir_archivo_objetivos = Panel_dir_archivo_objetivos(parent=Frame_principal)
+    Sizer_panel_principal.Add( Panel_dir_archivo_objetivos, 1, wx.EXPAND|wx.ALL, 5 )
+
     Panel_eleguir_tiempo = Panel_eleguir_tiempo(parent=Frame_principal)
     Sizer_panel_principal.Add( Panel_eleguir_tiempo, 1, wx.EXPAND|wx.ALL, 5 )
+
+    Panel_opciones = Panel_opciones(parent=Frame_principal)
+    Sizer_panel_principal.Add( Panel_opciones, 1, wx.EXPAND|wx.ALL, 5 )
 
     Panel_button = Panel_button(parent=Frame_principal)
     Sizer_panel_principal.Add( Panel_button, 1, wx.EXPAND|wx.ALL, 5 )

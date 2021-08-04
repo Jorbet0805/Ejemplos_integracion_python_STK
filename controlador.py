@@ -53,12 +53,15 @@ class appstk():
 
         if visible: 
             print("haciendo visible")
-        self.uiApplication.Visible=visible
-        print("Hecho visible")
+            self.uiApplication.Visible=visible
+            print("Hecho visible")
+        else:
+            self.uiApplication.Visible=visible
+            print("Hecho no visible")
 
-       
+        
     def getroot(self,path_sc=None):
-
+    
         self.path_sc = path_sc
 
         if self.uiApplication == None:
@@ -96,6 +99,18 @@ def actualizar_fecha(root,tiempo_incial,tiempo_final):
 
     actualizadorfecha = istk.actualizarfecha(root)
     actualizadorfecha.updatefecha(tiempo_incial,tiempo_final)
+
+
+@decorador.decorador_error(mensaje="A ocurrido un error en la insercion de objetivos",
+                 hacer_print=True,
+                 mensaje_comienzo="insertando objetivos"
+                 )
+def Insetar_objetivos (root,path_objetivos):
+    #Insetar rejilla
+ 
+        creadorderejilla=istk.introductor_objetivo(root,path_objetivos);
+        creadorderejilla.insertartajets();
+    
     
     
 @decorador.decorador_error(mensaje="Error en guardar escenario",
@@ -110,9 +125,12 @@ def guardar_escenario(root):
 def procesar_escenarios(
         boton,
         directorio_escenarios, 
+        dir_archivo_objetivos,
         tiempo_incial,
-        tiempo_final, 
+        tiempo_final,
+        usar_escenario_activo, 
         act_tiempo,
+        introducir_rejilla,
         visible
         ):
 
@@ -137,13 +155,6 @@ def procesar_escenarios(
 
         app = appstk()
 
-        #crear directorio para guardar reportes
-        try:
-            os.makedirs(os.path.join(directorio_escenarios,"reportes"))
-            path_dir_reportes = os.path.join(directorio_escenarios,"reportes")
-        except:
-            path_dir_reportes = os.path.join(directorio_escenarios,"reportes")
-
 
         iter = 0
         for fichero_sc in ficheros_sc:
@@ -164,6 +175,9 @@ def procesar_escenarios(
         
             if act_tiempo: 
                actualizar_fecha(root,tiempo_incial,tiempo_final)
+            
+            if introducir_rejilla:
+               Insetar_objetivos (root,dir_archivo_objetivos)
             
             guardar_escenario(root)
             iter += 1
